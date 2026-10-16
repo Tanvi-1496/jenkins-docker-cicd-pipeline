@@ -1,74 +1,490 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jenkins CI/CD Demo</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#081321">
+  <meta name="description" content="A Jenkins and Docker CI/CD deployment showcase.">
+  <title>Pipeline Studio | CI/CD Showcase</title>
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #101827, #164e63);
-            color: white;
-        }
+  <style>
+    :root {
+      --bg: #081321;
+      --panel: rgba(20, 39, 59, 0.76);
+      --border: rgba(148, 186, 215, 0.16);
+      --text: #edf6ff;
+      --muted: #9db1c7;
+      --cyan: #52e5f5;
+      --green: #63e6a4;
+    }
 
-        .card {
-            max-width: 650px;
-            margin: 20px;
-            padding: 45px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        h1 {
-            color: #67e8f9;
-            font-size: 2.3rem;
-        }
+    body {
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 10% 0%, #123d50 0, transparent 38%),
+        radial-gradient(ellipse at 95% 70%, #14394b 0, transparent 34%),
+        var(--bg);
+      line-height: 1.6;
+    }
 
-        p {
-            line-height: 1.7;
-            color: #e2e8f0;
-        }
+    .container {
+      width: min(1080px, 90%);
+      margin: auto;
+    }
 
-        .status {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 12px 20px;
-            background: #14532d;
-            border-radius: 30px;
-            color: #bbf7d0;
-        }
-    </style>
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 25px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 750;
+      letter-spacing: 0.3px;
+    }
+
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #1bb8d1, #3478ed);
+      color: white;
+      font-size: 22px;
+    }
+
+    .top-status {
+      color: var(--green);
+      border: 1px solid rgba(99, 230, 164, 0.25);
+      background: rgba(34, 197, 120, 0.08);
+      border-radius: 30px;
+      padding: 7px 13px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 78px 0 52px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: var(--cyan);
+      border: 1px solid rgba(82, 229, 245, 0.23);
+      background: rgba(82, 229, 245, 0.07);
+      border-radius: 30px;
+      padding: 7px 14px;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 820px;
+      margin: 22px auto 17px;
+      font-size: clamp(36px, 6vw, 66px);
+      line-height: 1.1;
+      letter-spacing: -2px;
+    }
+
+    .gradient-text {
+      color: var(--cyan);
+      background: linear-gradient(90deg, #62e7f5, #9bafff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: auto;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 12px 19px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .primary {
+      background: var(--cyan);
+      color: #071521;
+    }
+
+    .secondary {
+      color: var(--text);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.035);
+    }
+
+    section {
+      margin-bottom: 58px;
+    }
+
+    .section-heading {
+      margin-bottom: 22px;
+    }
+
+    .section-heading h2 {
+      font-size: 25px;
+      letter-spacing: -0.5px;
+    }
+
+    .section-heading p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 18px;
+      backdrop-filter: blur(14px);
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .stage {
+      padding: 23px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .stage:hover {
+      transform: translateY(-4px);
+      border-color: rgba(82, 229, 245, 0.42);
+    }
+
+    .stage-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 23px;
+    }
+
+    .stage-icon {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
+      background: rgba(82, 229, 245, 0.1);
+      color: var(--cyan);
+      font-size: 22px;
+    }
+
+    .stage-number {
+      color: #7d94ab;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .stage h3 {
+      margin-bottom: 7px;
+      font-size: 19px;
+    }
+
+    .stage p {
+      min-height: 66px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stage-status {
+      display: inline-block;
+      margin-top: 17px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .deployment {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 22px;
+      padding: 27px;
+    }
+
+    .deployment h3 {
+      margin: 9px 0 5px;
+      font-size: 21px;
+    }
+
+    .deployment p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px rgba(99, 230, 164, 0.7);
+    }
+
+    .url {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--cyan);
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .tech {
+      padding: 19px 12px;
+      text-align: center;
+      font-weight: 650;
+      font-size: 14px;
+    }
+
+    .tech span {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 25px;
+    }
+
+    .tech small {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 400;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 25px 0 32px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    @media (max-width: 700px) {
+      header {
+        align-items: flex-start;
+      }
+
+      .top-status {
+        font-size: 10px;
+      }
+
+      .hero {
+        padding: 58px 0 40px;
+      }
+
+      h1 {
+        letter-spacing: -1px;
+      }
+
+      .pipeline {
+        grid-template-columns: 1fr;
+      }
+
+      .stage p {
+        min-height: auto;
+      }
+
+      .deployment {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 22px;
+      }
+
+      .tech-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <main class="card">
-        <h1>My First CI/CD Pipeline</h1>
+  <header class="container">
+    <div class="brand">
+      <div class="brand-icon" aria-hidden="true">⌘</div>
+      <span>Pipeline<span class="gradient-text">Studio</span></span>
+    </div>
+    <div class="top-status">● CI/CD PROJECT</div>
+  </header>
 
-        <p>
-            Welcome! This application is part of my
-            Elevate Labs DevOps Internship Task 2.
-        </p>
+  <main class="container">
+    <section class="hero">
+      <span class="eyebrow">DEVOPS PROJECT SHOWCASE</span>
+      <h1>From Code to <span class="gradient-text">Deployment.</span></h1>
+      <p>
+        A demonstration of automated software delivery using Jenkins,
+        Docker, GitHub and Nginx. Built to make every deployment
+        simpler and more repeatable.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="#pipeline">Explore Pipeline ↓</a>
+        <a class="button secondary"
+           href="https://github.com/Tanvi-1496/jenkins-docker-cicd-pipeline"
+           target="_blank" rel="noopener noreferrer">
+          View Source Code ↗
+        </a>
+      </div>
+    </section>
 
-        <p>
-            Jenkins automates the build, test, and deployment
-            process, while Docker packages the application.
-        </p>
+    <section id="pipeline">
+      <div class="section-heading">
+        <h2>Our Delivery Pipeline</h2>
+        <p>Three stages that turn source code into a running application.</p>
+      </div>
 
-        <div class="status">
-            Application Status: Running
+      <div class="pipeline">
+        <article class="panel stage">
+          <div class="stage-top">
+            <div class="stage-icon" aria-hidden="true">⌘</div>
+            <span class="stage-number">STAGE 01</span>
+          </div>
+          <h3>Build</h3>
+          <p>Jenkins reads the project and builds a Docker image using the Dockerfile.</p>
+          <span class="stage-status">✓ Image built successfully</span>
+        </article>
+
+        <article class="panel stage">
+          <div class="stage-top">
+            <div class="stage-icon" aria-hidden="true">✓</div>
+            <span class="stage-number">STAGE 02</span>
+          </div>
+          <h3>Test</h3>
+          <p>The pipeline verifies that the generated Docker image exists and can be inspected.</p>
+          <span class="stage-status">✓ Image verification passed</span>
+        </article>
+
+        <article class="panel stage">
+          <div class="stage-top">
+            <div class="stage-icon" aria-hidden="true">↗</div>
+            <span class="stage-number">STAGE 03</span>
+          </div>
+          <h3>Deploy</h3>
+          <p>Docker runs the Nginx container, and the pipeline checks the web server configuration.</p>
+          <span class="stage-status">✓ Deployment check passed</span>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <h2>Deployment Overview</h2>
+        <p>Application endpoint and deployment architecture.</p>
+      </div>
+
+      <div class="panel deployment">
+        <div>
+          <div class="live-indicator">
+            <span class="dot"></span>
+            DEMO STATUS
+          </div>
+          <h3>CI/CD Web Application</h3>
+          <p>Served by Nginx inside a Docker container.</p>
+          <span class="url">Local endpoint: http://localhost:8082</span>
         </div>
-    </main>
+        <a class="button secondary"
+           href="http://localhost:8082">
+          Open Application ↗
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <h2>Technology Stack</h2>
+        <p>Tools used to build and deploy this project.</p>
+      </div>
+
+      <div class="tech-grid">
+        <div class="panel tech">
+          <span aria-hidden="true">♾️</span>
+          Jenkins
+          <small>Pipeline Automation</small>
+        </div>
+        <div class="panel tech">
+          <span aria-hidden="true">🐳</span>
+          Docker
+          <small>Containerization</small>
+        </div>
+        <div class="panel tech">
+          <span aria-hidden="true">⌘</span>
+          GitHub
+          <small>Source Control</small>
+        </div>
+        <div class="panel tech">
+          <span aria-hidden="true">🌐</span>
+          Nginx
+          <small>Web Server</small>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      Built as a DevOps internship project · Jenkins + Docker + Nginx
+    </div>
+  </footer>
 </body>
 </html>
-```
