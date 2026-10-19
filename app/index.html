@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LaunchPad | Your Workspace</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #08111f;
+      color: #edf5ff;
+      min-height: 100vh;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 8%;
+      border-bottom: 1px solid #203148;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .logo span {
+      color: #49e5c2;
+    }
+
+    .status {
+      color: #65edb0;
+      font-size: 13px;
+      background: #102a29;
+      border: 1px solid #20544b;
+      border-radius: 30px;
+      padding: 9px 14px;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 90px 24px 60px;
+    }
+
+    .eyebrow {
+      color: #49e5c2;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: 1.08;
+      letter-spacing: -3px;
+      max-width: 800px;
+    }
+
+    h1 span {
+      background: linear-gradient(90deg, #49e5c2, #72a8ff);
+      color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    .intro {
+      max-width: 620px;
+      color: #a4b5ca;
+      line-height: 1.8;
+      font-size: 17px;
+      margin: 25px 0 32px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      padding: 14px 22px;
+      border-radius: 10px;
+      font-weight: 700;
+      transition: 0.2s;
+    }
+
+    .primary {
+      color: #06151b;
+      background: #49e5c2;
+    }
+
+    .secondary {
+      color: #edf5ff;
+      border: 1px solid #31445c;
+      background: #122135;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.08);
+    }
+
+    .section-title {
+      margin: 75px 0 22px;
+      font-size: 25px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, #14263a, #0e1a2b);
+      border: 1px solid #273d55;
+      border-radius: 18px;
+      padding: 25px;
+    }
+
+    .card .number {
+      font-size: 34px;
+      font-weight: 800;
+      margin: 18px 0 8px;
+    }
+
+    .card h3 {
+      font-size: 16px;
+    }
+
+    .card p {
+      color: #9aadc3;
+      font-size: 14px;
+      line-height: 1.7;
+      margin-top: 10px;
+    }
+
+    .green {
+      color: #65edb0;
+    }
+
+    .blue {
+      color: #82b4ff;
+    }
+
+    .purple {
+      color: #c5a3ff;
+    }
+
+    .notice {
+      margin-top: 28px;
+      padding: 20px;
+      background: #10232d;
+      border: 1px solid #24454c;
+      border-radius: 12px;
+      color: #a9c9d0;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      border-top: 1px solid #203148;
+      color: #7f92aa;
+      font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+      main {
+        padding-top: 60px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        letter-spacing: -1.5px;
+      }
+
+      nav {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="logo">Launch<span>Pad.</span></div>
+    <div class="status">● Demo Application</div>
+  </nav>
+
+  <main>
+    <p class="eyebrow">Welcome to your workspace</p>
+
+    <h1>Your workspace,<br>
+      <span>ready to launch.</span>
+    </h1>
+
+    <p class="intro">
+      Welcome to LaunchPad, a demo web application built as part of a
+      hands-on CI/CD project. This application is packaged with Docker
+      and deployed using a Jenkins pipeline.
+    </p>
+
+    <div class="actions">
+      <a class="btn primary" href="#dashboard">Explore Dashboard ↘</a>
+      <a class="btn secondary" href="https://github.com/Tanvi-1496/jenkins-docker-cicd-pipeline"
+         target="_blank" rel="noopener noreferrer">View GitHub ↗</a>
+    </div>
+
+    <h2 class="section-title" id="dashboard">Application Overview</h2>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Build Pipeline</h3>
+        <div class="number green">CI</div>
+        <p>Jenkins automates the application build process from your repository.</p>
+      </div>
+
+      <div class="card">
+        <h3>Containerization</h3>
+        <div class="number blue">Docker</div>
+        <p>The application is packaged into a container image for deployment.</p>
+      </div>
+
+      <div class="card">
+        <h3>Web Server</h3>
+        <div class="number purple">Nginx</div>
+        <p>Nginx serves this responsive web application inside the container.</p>
+      </div>
+    </div>
+
+    <div class="notice">
+      <strong class="green">About this project</strong><br>
+      This is a demonstration interface for the Elevate Labs CI/CD internship
+      task. The cards describe the technologies used; they do not display
+      live pipeline metrics.
+    </div>
+  </main>
+
+  <footer>
+    LaunchPad Demo · Built with HTML, CSS, Jenkins, Docker and Nginx
+  </footer>
+</body>
+</html>
